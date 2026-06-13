@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<ruleset name="wpcli-wxr-convert-command">
+	<description>Custom ruleset for wpcli-wxr-convert-command</description>
+
+	<!-- What to scan. -->
+	<file>.</file>
+
+	<!-- Show progress. -->
+	<arg value="p"/>
+
+	<!-- Strip the filepaths down to the relevant bit. -->
+	<arg name="basepath" value="./"/>
+
+	<!-- Check up to 8 files simultaneously. -->
+	<arg name="parallel" value="8"/>
+
+	<!-- Use the WP-CLI coding standards ruleset. -->
+	<rule ref="WP_CLI_CS"/>
+
+	<!-- Minimum PHP version. -->
+	<config name="testVersion" value="7.2-"/>
+
+	<!-- Files to exclude. -->
+	<exclude-pattern>*/vendor/*</exclude-pattern>
+	<exclude-pattern>*/features/bootstrap/*</exclude-pattern>
+</ruleset>

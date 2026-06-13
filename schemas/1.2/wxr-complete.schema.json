@@ -1,0 +1,444 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/camaleaun/wxr-command/trunk/schemas/1.2/wxr-complete.schema.json",
+  "title": "WXR Complete Export",
+  "description": "Complete WordPress eXtended RSS (WXR) export, as converted by wp wxr from --format=yml|json.",
+  "type": "object",
+  "required": [
+    "meta",
+    "channel",
+    "items"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "JSON Schema URI \u2014 added automatically by wp wxr from."
+    },
+    "meta": {
+      "description": "Document-level metadata extracted from the WXR file header comment.",
+      "type": "object",
+      "required": [],
+      "additionalProperties": false,
+      "properties": {
+        "wxr_version": {
+          "description": "WXR format version.",
+          "type": "string",
+          "examples": [
+            "1.2"
+          ]
+        },
+        "generator": {
+          "description": "WordPress version string from the generator comment.",
+          "type": "string",
+          "examples": [
+            "WordPress/6.8"
+          ]
+        },
+        "created": {
+          "description": "Export timestamp from the generator comment.",
+          "type": [
+            "string",
+            "integer"
+          ],
+          "examples": [
+            "2026-01-01 00:00"
+          ]
+        },
+        "namespaces": {
+          "description": "XML namespace prefix \u2192 URI map used in the WXR file.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "properties": {
+            "excerpt": {
+              "type": "string"
+            },
+            "content": {
+              "type": "string"
+            },
+            "wfw": {
+              "type": "string"
+            },
+            "dc": {
+              "type": "string"
+            },
+            "wp": {
+              "type": "string"
+            }
+          }
+        },
+        "wordpress": {
+          "description": "WordPress version extracted from generator comment (e.g. 7.0).",
+          "type": [
+            "string",
+            "number"
+          ]
+        }
+      }
+    },
+    "channel": {
+      "description": "RSS channel metadata from the WXR <channel> element, including authors and taxonomy terms.",
+      "type": "object",
+      "required": [
+        "title"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "description": "Blog title.",
+          "type": "string"
+        },
+        "link": {
+          "description": "Blog URL.",
+          "type": "string"
+        },
+        "description": {
+          "description": "Blog tagline.",
+          "type": "string"
+        },
+        "language": {
+          "description": "Blog locale code.",
+          "type": "string",
+          "examples": [
+            "en-US",
+            "pt-BR"
+          ]
+        },
+        "base_site_url": {
+          "description": "WordPress site URL.",
+          "type": "string"
+        },
+        "base_blog_url": {
+          "description": "WordPress blog URL.",
+          "type": "string"
+        },
+        "pub_date": {
+          "description": "Channel publish date (RFC 822).",
+          "type": [
+            "string",
+            "integer"
+          ]
+        },
+        "generator": {
+          "description": "WordPress generator URI.",
+          "type": "string"
+        },
+        "image": {
+          "description": "Channel image (site icon).",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "url": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "link": {
+              "type": "string"
+            },
+            "width": {
+              "description": "Image width in pixels.",
+              "type": "integer"
+            },
+            "height": {
+              "description": "Image height in pixels.",
+              "type": "integer"
+            }
+          }
+        },
+        "authors": {
+          "description": "Registered WordPress authors.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/author"
+          }
+        },
+        "categories": {
+          "description": "Registered category terms.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/wp_term"
+          }
+        },
+        "tags": {
+          "description": "Registered post tags.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/wp_term"
+          }
+        },
+        "terms": {
+          "description": "Registered custom taxonomy terms.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/wp_term"
+          }
+        }
+      }
+    },
+    "items": {
+      "description": "Exported posts / pages / template parts / navigation menus.",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/item"
+      }
+    }
+  },
+  "$defs": {
+    "author": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "description": "wp:author_id.",
+          "type": "integer"
+        },
+        "login": {
+          "description": "wp:author_login.",
+          "type": "string"
+        },
+        "email": {
+          "description": "wp:author_email.",
+          "type": "string"
+        },
+        "display_name": {
+          "description": "wp:author_display_name.",
+          "type": "string"
+        },
+        "first_name": {
+          "description": "wp:author_first_name.",
+          "type": "string"
+        },
+        "last_name": {
+          "description": "wp:author_last_name.",
+          "type": "string"
+        }
+      }
+    },
+    "wp_term": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "id": {
+          "type": [
+            "string",
+            "integer"
+          ]
+        },
+        "slug": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "parent": {
+          "type": "string"
+        }
+      }
+    },
+    "guid": {
+      "description": "Post GUID with its isPermaLink attribute.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "value",
+        "isPermaLink"
+      ],
+      "properties": {
+        "value": {
+          "type": "string"
+        },
+        "isPermaLink": {
+          "type": "string",
+          "enum": [
+            "true",
+            "false"
+          ]
+        }
+      }
+    },
+    "item": {
+      "type": "object",
+      "required": [
+        "post_id",
+        "post_name",
+        "post_type",
+        "status",
+        "post_date"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "post_id": {
+          "description": "Database post ID.",
+          "type": "integer"
+        },
+        "title": {
+          "description": "Post title.",
+          "type": "string"
+        },
+        "link": {
+          "description": "Post permalink.",
+          "type": "string"
+        },
+        "pub_date": {
+          "description": "RSS pub date (RFC 822).",
+          "type": [
+            "string",
+            "integer"
+          ]
+        },
+        "creator": {
+          "description": "dc:creator \u2014 author login.",
+          "type": "string"
+        },
+        "guid": {
+          "$ref": "#/$defs/guid"
+        },
+        "description": {
+          "description": "Post description.",
+          "type": "string"
+        },
+        "content": {
+          "description": "Post content (block markup, content:encoded).",
+          "type": "string"
+        },
+        "excerpt": {
+          "description": "Post excerpt.",
+          "type": "string"
+        },
+        "post_date": {
+          "description": "Publish date-time. Compact form: \"YYYYMMDDTHHmmss[\u00b1HHMM]\". No TZ suffix or offset=0 means UTC (post_date_gmt = post_date). Non-zero offset encodes local time; builder derives post_date_gmt automatically.",
+          "type": [
+            "string",
+            "integer"
+          ],
+          "examples": [
+            "20260101T000000",
+            "20260101T210000-0300"
+          ]
+        },
+        "post_modified": {
+          "description": "Modified date-time. Same TZ format as post_date. Omit when equal to post_date; builder mirrors post_date.",
+          "type": [
+            "string",
+            "integer"
+          ]
+        },
+        "comment_status": {
+          "description": "Comment status.",
+          "type": "string",
+          "enum": [
+            "open",
+            "closed"
+          ]
+        },
+        "ping_status": {
+          "description": "Ping status.",
+          "type": "string",
+          "enum": [
+            "open",
+            "closed"
+          ]
+        },
+        "post_name": {
+          "description": "URL slug.",
+          "type": "string"
+        },
+        "status": {
+          "description": "Publication status (wp:status).",
+          "type": "string",
+          "enum": [
+            "publish",
+            "draft",
+            "pending",
+            "private",
+            "future",
+            "inherit",
+            "trash"
+          ]
+        },
+        "post_parent": {
+          "description": "Parent post ID.",
+          "type": "integer"
+        },
+        "menu_order": {
+          "description": "Menu/page order.",
+          "type": "integer"
+        },
+        "post_type": {
+          "description": "Post type.",
+          "type": "string",
+          "examples": [
+            "post",
+            "page",
+            "wp_template_part",
+            "wp_navigation"
+          ]
+        },
+        "post_password": {
+          "description": "Post password.",
+          "type": "string"
+        },
+        "is_sticky": {
+          "description": "Sticky post flag.",
+          "type": "integer",
+          "enum": [
+            0,
+            1
+          ]
+        },
+        "attachment_url": {
+          "description": "wp:attachment_url.",
+          "type": "string"
+        },
+        "categories": {
+          "description": "Taxonomy terms assigned to this post.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "domain": {
+                "type": "string"
+              },
+              "nicename": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "meta": {
+          "description": "Post meta key \u2192 value pairs. Empty when no meta exists.",
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "array",
+              "maxItems": 0
+            }
+          ]
+        },
+        "comments": {
+          "description": "Comments attached to this post.",
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    }
+  }
+}

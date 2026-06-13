@@ -1,0 +1,68 @@
+{
+    "name": "camaleaun/wxr-command",
+    "type": "wp-cli-package",
+    "description": "WP-CLI command: wp wxr from/to — lossless WXR ↔ YAML/JSON converter.",
+    "homepage": "https://camaleaun.github.io",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Gilberto Tavares",
+            "email": "camaleaun@gmail.com",
+            "homepage": "https://camaleaun.github.io"
+        }
+    ],
+    "require": {
+        "php": ">=7.2.24",
+        "wp-cli/wp-cli": "^2.0"
+    },
+    "require-dev": {
+        "wp-cli/wp-cli-tests": "^4.2 || ^5"
+    },
+    "config": {
+        "process-timeout": 7200,
+        "sort-packages": true,
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "johnpbloch/wordpress-core-installer": true,
+            "phpstan/extension-installer": true
+        },
+        "lock": false
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-trunk": "1.x-dev"
+        },
+        "commands": [
+            "wxr from",
+            "wxr to"
+        ]
+    },
+    "autoload": {
+        "classmap": [
+            "src/"
+        ],
+        "files": [
+            "wpcli-wxr-convert-command.php"
+        ]
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "scripts": {
+        "behat": "run-behat-tests",
+        "behat-rerun": "rerun-behat-tests",
+        "lint": "run-linter-tests",
+        "phpcs": "run-phpcs-tests",
+        "phpcbf": "run-phpcbf-cleanup",
+        "phpstan": "run-phpstan-tests",
+        "prepare-tests": "install-package-tests",
+        "test": [
+            "@lint",
+            "@phpcs",
+            "@phpstan",
+            "@behat"
+        ]
+    },
+    "support": {
+        "issues": "https://github.com/camaleaun/wpcli-wxr-convert-command/issues"
+    }
+}

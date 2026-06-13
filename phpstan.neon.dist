@@ -1,0 +1,11 @@
+parameters:
+  level: 5
+  paths:
+    - src
+    - wpcli-wxr-convert-command.php
+  scanDirectories:
+    - vendor/wp-cli/wp-cli/php
+  treatPhpDocTypesAsCertain: false
+  ignoreErrors:
+    - identifier: missingType.parameter
+    - identifier: missingType.return

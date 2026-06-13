@@ -1,0 +1,16 @@
+name: Testing
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches:
+      - trunk
+  schedule:
+    - cron: '17 1 * * *'
+
+jobs:
+  test:
+    uses: wp-cli/.github/.github/workflows/reusable-testing.yml@main
+    with:
+      matrix: '{ "include": [], "exclude": [{"os": "windows-latest"}] }'

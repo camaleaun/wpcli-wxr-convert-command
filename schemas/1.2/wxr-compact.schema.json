@@ -1,0 +1,286 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/camaleaun/wxr-command/trunk/schemas/1.2/wxr-compact.schema.json",
+  "title": "WXR Compact Export",
+  "description": "Compact WXR export produced by wp wxr from --compact. Fields that the WordPress importer ignores are omitted. Fully reversible to valid WXR via wp wxr to.",
+  "type": "object",
+  "required": [
+    "channel",
+    "items"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "JSON Schema URI \u2014 added automatically by wp wxr from."
+    },
+    "meta": {
+      "description": "Document-level metadata. generator and created are stripped in compact mode.",
+      "type": "object",
+      "required": [],
+      "additionalProperties": false,
+      "properties": {
+        "wxr_version": {
+          "type": "string",
+          "examples": [
+            "1.2"
+          ]
+        },
+        "namespaces": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "properties": {
+            "excerpt": {
+              "type": "string"
+            },
+            "content": {
+              "type": "string"
+            },
+            "wfw": {
+              "type": "string"
+            },
+            "dc": {
+              "type": "string"
+            },
+            "wp": {
+              "type": "string"
+            }
+          }
+        },
+        "wordpress": {
+          "description": "WordPress version (informational, stripped in compact if absent).",
+          "type": [
+            "string",
+            "number"
+          ]
+        }
+      }
+    },
+    "channel": {
+      "description": "Channel metadata. image, generator, pub_date, categories, tags, terms stripped in compact mode.",
+      "type": "object",
+      "required": [
+        "title"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "link": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "language": {
+          "type": "string",
+          "examples": [
+            "en-US",
+            "pt-BR"
+          ]
+        },
+        "base_site_url": {
+          "type": "string"
+        },
+        "base_blog_url": {
+          "type": "string"
+        },
+        "authors": {
+          "description": "Authors. Omitted when no item has a dc:creator value.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/author"
+          }
+        }
+      }
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/item_compact"
+      }
+    }
+  },
+  "$defs": {
+    "author": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "login": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "display_name": {
+          "type": "string"
+        },
+        "first_name": {
+          "type": "string"
+        },
+        "last_name": {
+          "type": "string"
+        }
+      }
+    },
+    "item_compact": {
+      "type": "object",
+      "required": [
+        "post_id",
+        "post_name",
+        "post_type",
+        "status",
+        "post_date"
+      ],
+      "additionalProperties": false,
+      "description": "Compact item. Stripped: guid, link, pub_date, creator (when empty), description (when empty), excerpt (when empty), attachment_url (when empty), post_password (when empty), is_sticky (when 0), menu_order (when 0), post_parent (when 0), post_modified (when == post_date), categories (when empty), comments (when empty), meta keys: _edit_lock _edit_last _pingme _encloseme _wp_attached_file _wp_attachment_metadata _wp_old_slug _wp_old_date.",
+      "properties": {
+        "post_id": {
+          "type": "integer"
+        },
+        "title": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "post_date": {
+          "description": "Publish date-time. Compact form: \"YYYYMMDDTHHmmss[\u00b1HHMM]\". No TZ suffix or offset=0 means UTC. Non-zero offset encodes local time; builder derives post_date_gmt automatically.",
+          "type": [
+            "string",
+            "integer"
+          ],
+          "examples": [
+            "20260101T000000",
+            "20260101T210000-0300"
+          ]
+        },
+        "post_modified": {
+          "description": "Omitted when equal to post_date. Same TZ format as post_date.",
+          "type": [
+            "string",
+            "integer"
+          ]
+        },
+        "comment_status": {
+          "type": "string",
+          "enum": [
+            "open",
+            "closed"
+          ]
+        },
+        "ping_status": {
+          "type": "string",
+          "enum": [
+            "open",
+            "closed"
+          ]
+        },
+        "post_name": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "publish",
+            "draft",
+            "pending",
+            "private",
+            "future",
+            "inherit",
+            "trash"
+          ]
+        },
+        "post_parent": {
+          "description": "Omitted when 0.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "menu_order": {
+          "description": "Omitted when 0.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "post_type": {
+          "type": "string",
+          "examples": [
+            "post",
+            "page",
+            "wp_template_part",
+            "wp_navigation"
+          ]
+        },
+        "is_sticky": {
+          "description": "Omitted when 0.",
+          "type": "integer",
+          "const": 1
+        },
+        "meta": {
+          "description": "Post meta. Disposable keys stripped. Empty when no meaningful meta.",
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              },
+              "not": {
+                "anyOf": [
+                  {
+                    "required": [
+                      "_edit_lock"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "_edit_last"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "_pingme"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "_encloseme"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "_wp_attached_file"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "_wp_attachment_metadata"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "_wp_old_slug"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "_wp_old_date"
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "type": "array",
+              "maxItems": 0
+            }
+          ]
+        }
+      }
+    }
+  }
+}

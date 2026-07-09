@@ -368,7 +368,7 @@ class Camaleaun_WXR_Convert_Command extends WP_CLI_Command {
 		// Authors: strip empty string fields (first_name, last_name, etc.).
 		if ( ! empty( $data['channel']['authors'] ) ) {
 			$data['channel']['authors'] = array_map( function ( array $a ): array {
-				return array_filter( $a, fn( $v ) => ! ( is_string( $v ) && '' === $v ) );
+				return array_filter( $a, function ( $v ) { return ! ( is_string( $v ) && '' === $v ); } );
 			}, $data['channel']['authors'] );
 		}
 
